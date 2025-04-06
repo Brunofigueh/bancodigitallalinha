@@ -1,6 +1,8 @@
 package br.com.cdb.bancodigitallalinha.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
 import java.util.UUID;
 
 @Entity
@@ -10,6 +12,7 @@ public class Cliente {
     private String cpf;
     private String dataNascimento;
     private Endereco endereco;
+    @Id
     private UUID clienteID;
 
     public void setNome(String nome)
