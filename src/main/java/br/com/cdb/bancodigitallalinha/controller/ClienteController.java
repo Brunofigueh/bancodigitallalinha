@@ -12,12 +12,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.cdb.bancodigitallalinha.entity.Cliente;
+import br.com.cdb.bancodigitallalinha.repository.ClienteRepository;
 import br.com.cdb.bancodigitallalinha.service.ClienteService;
+
+
+
 
 @RestController
 @RequestMapping("/cliente")
 public class ClienteController {
 
+
+    @Autowired
+    private Cliente cliente;
+
+    @Autowired
+    private ClienteRepository clienteRepository;
 
     @Autowired
     private ClienteService clienteService;
@@ -40,4 +50,27 @@ public class ClienteController {
          List<Cliente> clientes = clienteService.getClientes();
          return new ResponseEntity<List<Cliente>>(clientes, HttpStatus.OK);
     }
+
+
+    @GetMapping("/mostrar")
+    public  void  mostrarCliente(@RequestBody String cpf )
+     {
+        if (cliente.getCPF() != cpf)
+        {
+             new ResponseEntity<>("Cliente não encontrado", HttpStatus.NOT_FOUND);
+        }
+        new ResponseEntity<>(clienteRepository.getReferenceById(cliente.getClienteID()), HttpStatus.OK);
+     }
+
+     @GetMapping("/setCliennte")
+     public ResponseEntity<Cliente> setarCliente()
+     {
+        if (clienteRepository.getReferenceById(cliente.getClienteID()) == null)
+        {
+            return new ResponseEntity<Cliente>( HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(clienteRepository.getReferenceById(cliente.getClienteID()), HttpStatus.OK);
+     }
+
 }
+

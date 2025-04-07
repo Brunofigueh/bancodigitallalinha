@@ -128,7 +128,7 @@ public class ClienteService {
         endereco.setCidade(endereco.getCidade());
         endereco.setEstado(endereco.getEstado());
 
-        enderecoRepository.save(endereco);
+        enderecoRepository.addEndereco(endereco);
 
 
         return true;

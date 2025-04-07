@@ -3,8 +3,11 @@ package br.com.cdb.bancodigitallalinha.entity;
 import java.util.UUID;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
-@Entity
+// @Entity
 public class Endereco {
 
     private String rua;
@@ -13,6 +16,8 @@ public class Endereco {
     private String cidade;
     private String estado;
     private String cep;
+    // @Id
+    // @GeneratedValue(strategy = GenerationType.UUID)
     private UUID EnderecoId;
 
 

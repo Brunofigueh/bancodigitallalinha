@@ -1,14 +1,21 @@
 package br.com.cdb.bancodigitallalinha.repository;
 
-import org.springframework.stereotype.Repository;
 
+import br.com.cdb.bancodigitallalinha.entity.Cliente;
 import br.com.cdb.bancodigitallalinha.entity.Endereco;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.ArrayList;
 
-import java.util.UUID;
 
-@Repository
-public interface Enderecorepository extends JpaRepository<Endereco, UUID>{
+public class Enderecorepository {
+
+    ArrayList<Endereco> enderecoDB =new ArrayList<>();
+	
+	Cliente cliente = new Cliente();
+	
+	public void addEndereco(Endereco endereco)
+	{
+		enderecoDB.add(endereco);
+	}
 
 }
