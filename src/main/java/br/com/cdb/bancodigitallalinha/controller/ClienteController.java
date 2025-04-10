@@ -23,11 +23,11 @@ import br.com.cdb.bancodigitallalinha.service.ClienteService;
 public class ClienteController {
 
 
-    @Autowired
-    private Cliente cliente;
+    // @Autowired
+    // private Cliente cliente;
 
     @Autowired
-    private ClienteRepository clienteRepository;
+    private ClienteRepository clienteRepository ;
 
     @Autowired
     private ClienteService clienteService;
@@ -35,7 +35,7 @@ public class ClienteController {
     @PostMapping("/add")
     public ResponseEntity<String> addCliente(@RequestBody Cliente cliente) {
        
-        Cliente clienteAdded = clienteService.addCliente(cliente.getNome(), cliente.getCPF(), cliente.getDataNasc(), cliente.getEndereco(), cliente.getClienteID());
+        Cliente clienteAdded = clienteService.addCliente(cliente.getNome(), cliente.getCPF(), cliente.getDataNascimento(), cliente.getEndereco(), cliente.getClienteID());
 
         if (clienteAdded != null) 
         {
@@ -55,6 +55,8 @@ public class ClienteController {
     @GetMapping("/mostrar")
     public  void  mostrarCliente(@RequestBody String cpf )
      {
+        Cliente cliente = new Cliente();
+    
         if (cliente.getCPF() != cpf)
         {
              new ResponseEntity<>("Cliente não encontrado", HttpStatus.NOT_FOUND);
@@ -65,6 +67,8 @@ public class ClienteController {
      @GetMapping("/setCliennte")
      public ResponseEntity<Cliente> setarCliente()
      {
+        Cliente cliente = new Cliente();
+
         if (clienteRepository.getReferenceById(cliente.getClienteID()) == null)
         {
             return new ResponseEntity<Cliente>( HttpStatus.NOT_FOUND);

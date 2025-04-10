@@ -2,6 +2,9 @@ package br.com.cdb.bancodigitallalinha.service;
 
 import java.util.ArrayList;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class validadorCPF {
 
     //VALIDAÇÃO DE CPF

@@ -9,18 +9,22 @@ import jakarta.persistence.OneToOne;
 
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 public class Cliente {
 
     private String nome;
     private String cpf;
+
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private String dataNascimento;
 
     @OneToOne(cascade = CascadeType.ALL)
     private Endereco endereco;
     
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private UUID clienteID;
 
     public void setNome(String nome)
@@ -43,11 +47,11 @@ public class Cliente {
     }
 
 
-    public void setDataNasc(String dataNascimento)
+    public void setDataNascimento(String dataNascimento)
     {
         this.dataNascimento = dataNascimento;
     }
-    public String getDataNasc()
+    public String getDataNascimento()
     {
         return dataNascimento;
     }

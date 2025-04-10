@@ -12,22 +12,19 @@ import org.springframework.stereotype.Service;
 import br.com.cdb.bancodigitallalinha.entity.Cliente;
 import br.com.cdb.bancodigitallalinha.entity.Endereco;
 import br.com.cdb.bancodigitallalinha.repository.ClienteRepository;
-import br.com.cdb.bancodigitallalinha.repository.Enderecorepository;
-
+import br.com.cdb.bancodigitallalinha.repository.EnderecoRepository;
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 @Service
 public class ClienteService {
 
     @Autowired
     private ClienteRepository clienteRepository;
     @Autowired
-    private Enderecorepository enderecoRepository;
+    private EnderecoRepository enderecoRepository;
     @Autowired
     private validadorCPF validacaoCpf;
-    @Autowired
-    private Cliente cliente;
 
-    @Autowired
-    private Endereco endereco;
 
     public Cliente addCliente(String nome, String cpf, String dataNascimento, Endereco endereco, UUID clienteID)
     {
@@ -36,15 +33,15 @@ public class ClienteService {
          * cliente .
          */
 
-        if ( clienteRepository.cpfCheck(cpf) )
+        if ( clienteRepository.findByCpf(cpf).isPresent())
         {
-            System.out.println("Esse CPF: "+cpf+" possui cadastro e conta ativa e nossos sistemas.");
+            log.info("Esse CPF: "+cpf+" possui cadastro e conta ativa e nossos sistemas.");
             return null;
         }
 
         if (  !validacaoCpf.validarCPF(cpf) )
         {
-            System.out.println("CPF não valido");
+            log.info("CPF não valido");
             return null;
         }
         if (!validarNome(nome)   )
@@ -69,7 +66,7 @@ public class ClienteService {
 
         clientes.setNome(nome);
         clientes.setCPF(cpf);
-        clientes.setDataNasc(dataNascimento);
+        clientes.setDataNascimento(dataNascimento);
         clientes.setEndereco(endereco);
         clientes.setClienteID(uuid);
 
@@ -93,27 +90,27 @@ public class ClienteService {
 
         if( enderecos.getNumero() <= 0 )
         {
-            System.out.println("Número invádo.");
+            log.info("Número invádo.");
             return false;
         }
-        if( enderecos.getRua().length() < 2 || enderecos.getRua().length() > 240 || enderecos.getRua() == null )
+        if(enderecos.getRua() == null  || enderecos.getRua().length() < 2 || enderecos.getRua().length() > 240   )
         {
-            System.out.println("Você precisa digitar um rua válida.");
+            log.info("Você precisa digitar um rua válida.");
             return false;
         }
-        if(  enderecos.getCidade().length() < 2 || enderecos.getCidade().length() > 120 || enderecos.getCidade() == null )
+        if(enderecos.getCidade() == null ||  enderecos.getCidade().length() < 2 || enderecos.getCidade().length() > 120   )
         {
-            System.out.println("Digite uma cidade válida.");
+            log.info("Digite uma cidade válida.");
             return false;
         }
-        if(  enderecos.getEstado().length() < 2 || enderecos.getEstado().length() > 40 || enderecos.getEstado() == null)
+        if(enderecos.getEstado() == null || enderecos.getEstado().length() < 2 || enderecos.getEstado().length() > 40  )
         {
-            System.out.println("Digite um Estado válido.");
+            log.info("Digite um Estado válido.");
             return false;
         }
-        if(!enderecos.getCep().matches(FORMATO_CEP))
+        if(enderecos.getCep() == null || !enderecos.getCep().matches(FORMATO_CEP))
         {
-            System.out.println("Digite um CEP válido.");
+            log.info("Digite um CEP válido.");
             return false;
         }
 
@@ -128,7 +125,7 @@ public class ClienteService {
         endereco.setCidade(endereco.getCidade());
         endereco.setEstado(endereco.getEstado());
 
-        enderecoRepository.addEndereco(endereco);
+        enderecoRepository.save(endereco);
 
 
         return true;
@@ -160,13 +157,19 @@ public class ClienteService {
         //Data atual do sistema
         LocalDate atualDate = LocalDate.now() ;
 
-
-
-        if (!dataNascimento.matches(FORMATO_DATA_NASCIMENTO))
+        if (dataNascimento == null || dataNascimento.isEmpty() )
         {
-            System.out.println("Data no formato invalido, por favor siga o padrão: dd/MM/yyyy");
+            System.out.println(dataNascimento);
+            log.error("Date is null or empty");
             return false;
-        }LocalDate dataNascimentoFormatada = LocalDate.parse(dataNascimento, formatoDataEntrada );
+
+        } else if (!dataNascimento.matches(FORMATO_DATA_NASCIMENTO))
+        {
+            log.error("Data no formato invalido, por favor siga o padrão: dd/MM/yyyy"); 
+        }
+        LocalDate dataNascimentoFormatada = LocalDate.parse(dataNascimento, formatoDataEntrada );
+
+       
 
         //CALCULANDO A IDADE
         Period calculoData = Period.between(dataNascimentoFormatada, atualDate);
@@ -174,7 +177,7 @@ public class ClienteService {
 
         if (idadeAtual < 18)
         {
-            System.out.println("Cliente tem dever ter 18 anos ou mais.");
+            log.info("Cliente tem dever ter 18 anos ou mais.");
             return false;
         }return true;
     }

@@ -7,7 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
-// @Entity
+@Entity
 public class Endereco {
 
     private String rua;
@@ -16,17 +16,17 @@ public class Endereco {
     private String cidade;
     private String estado;
     private String cep;
-    // @Id
-    // @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID EnderecoId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID enderecoId;
 
 
     public UUID getEnderecoId() {
-        return EnderecoId;
+        return enderecoId;
     }
 
     public void setEnderecoId(UUID enderecoId) {
-        EnderecoId = enderecoId;
+        enderecoId = enderecoId;
     }
 
     public String getRua() {
