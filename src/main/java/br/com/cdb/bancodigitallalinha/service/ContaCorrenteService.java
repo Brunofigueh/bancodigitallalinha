@@ -93,7 +93,7 @@ public class ContaCorrenteService {
 		BigDecimal limite = limiteAtual.getLimiteContaCC();
 		
 		if (valor.compareTo(saldo) <=  0) {
-			contaDao.sacar(saldo, valor);
+			saldo = saldo.subtract(valor);
 		}
 		else if (valor.compareTo(saldo.add(limite)) < 0)
 		{

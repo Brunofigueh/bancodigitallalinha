@@ -75,7 +75,7 @@ public class ContaPopancaService
 		 */
 		
 		if (valor.compareTo(saldo) <= 0 ) {
-			contaDao.sacar(saldo, valor);
+			saldo = saldo.subtract(valor);
 		}
 		else
 		{

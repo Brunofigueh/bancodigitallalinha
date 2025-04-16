@@ -9,7 +9,6 @@ import jakarta.persistence.Id;
 
 @Entity
 public class Endereco {
-
     private String rua;
     private int numero;
     private String complemento = null;

@@ -1,32 +1,39 @@
 package br.com.cdb.bancodigitallalinha.entity;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.ManyToAny;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Conta 
+public abstract class Conta 
 {	
+
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private UUID id;
 
 	private BigDecimal saldo;
 
-	
+	@ManyToOne
 	private Cliente cliente;
+
 	private CategoriaDeClientes  categoria;
 
-	@Id
-	@OneToOne
+	@Column(unique = true)
 	private long numeroConta;
 	
 

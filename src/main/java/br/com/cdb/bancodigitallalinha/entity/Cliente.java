@@ -2,17 +2,19 @@ package br.com.cdb.bancodigitallalinha.entity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 
 import java.util.UUID;
 
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 public class Cliente {
+
+
+
 
     private String nome;
     private String cpf;
@@ -24,7 +26,6 @@ public class Cliente {
     private Endereco endereco;
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private UUID clienteID;
 
     public void setNome(String nome)
