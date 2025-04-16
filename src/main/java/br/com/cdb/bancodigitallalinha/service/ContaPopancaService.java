@@ -11,13 +11,13 @@ import br.com.cdb.bancodigitallalinha.entity.Cliente;
 import br.com.cdb.bancodigitallalinha.entity.Conta;
 import br.com.cdb.bancodigitallalinha.entity.ContaPoupanca;
 import br.com.cdb.bancodigitallalinha.repository.ClienteRepository;
-import br.com.cdb.bancodigitallalinha.repository.ContaRepository;
+import br.com.cdb.bancodigitallalinha.repository.ContaPoupancaRepository;
 
 @Service
 public class ContaPopancaService 
 {
     @Autowired
-    ContaRepository contaDao;
+    ContaPoupancaRepository contaDao;
     @Autowired
     ClienteRepository clienteDao;
 	
@@ -94,9 +94,9 @@ public class ContaPopancaService
 	 * @param: saldo: saldo da conta
 	 */
 	{
-		BigDecimal saldo = contaDao.buscaConta(numeroContaPattern).getSaldo();
+		BigDecimal saldo = buscaConta(numeroContaPattern).getSaldo();
 		saldo.add(valor);
-		System.out.println("Conta "+contaDao.buscaConta(numeroContaPattern)+ " Saldo: "+ saldo);
+		System.out.println("Conta "+ buscaConta(numeroContaPattern)+ " Saldo: "+ saldo);
 	}
 	
 	
@@ -106,10 +106,10 @@ public class ContaPopancaService
      * Método de transferencia entre contas.        
      */
 	{
-		BigDecimal saldo = contaDao.buscaConta(numeroConta).getSaldo();
+		BigDecimal saldo = buscaConta(numeroConta).getSaldo();
 		
 		
-		if( contaDao.contaCheck(numeroConta) && saldo.compareTo(valor) >= 0)
+		if( contaCheck(numeroConta) && saldo.compareTo(valor) >= 0)
 		{
 			
 			depositar(valor, contaReceb) ;
@@ -179,15 +179,15 @@ public class ContaPopancaService
     }
 
 
-	//EXIBIR CONTAS POUPANÇAS 
-    /**
-     * Método que ira listar todas as contas poupancas
-     * @param: contaDao: Instância do DAO de conta.     
-     */
-	public void mostraContasPoupancas() {
-		 contaDao.listarContas();
+	// //EXIBIR CONTAS POUPANÇAS 
+    // /**
+    //  * Método que ira listar todas as contas poupancas
+    //  * @param: contaDao: Instância do DAO de conta.     
+    //  */
+	// public void mostraContasPoupancas() {
+	// 	 contaDao.listarContas();
 		
-	}
+	// }
 
 	public Conta getContasPopanca()
     /**
@@ -202,6 +202,36 @@ public class ContaPopancaService
 			}
 		}
 		return null;
+	}
+
+	public ContaPoupanca buscaConta(long numeroConta)
+	{
+		/**
+		 * Método que ira buscar uma conta poupanca considerando o número da conta.
+		 * @param numeroConta: Número da conta a ser buscada.
+		 * @return: Retorna a conta caso encontre.
+		 * @return: Retorna null caso não encontre a conta.   
+		 */
+		ContaPoupanca conta = contaDao.findByNumeroConta(numeroConta);
+		
+		return conta;
+	}
+
+	public boolean contaCheck(long numeroConta)
+	{
+		/**
+		 * Método que ira verificar se a conta existe na base.
+		 * @param numeroConta: Número da conta a ser verificada.
+		 * @return: Retorna true caso encontre a conta.
+		 * @return: Retorna false caso não encontre a conta.   
+		 */
+		ContaPoupanca conta = contaDao.findByNumeroConta(numeroConta);
+		if (conta == null)
+		{
+			return false;
+		}
+		
+		return true;
 	}
 
 }

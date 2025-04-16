@@ -55,9 +55,10 @@ public class ClienteController {
     @GetMapping("/mostrar")
     public  void  mostrarCliente(@RequestBody String cpf )
      {
-        Cliente cliente = new Cliente();
+        Cliente cliente = clienteRepository.findByCpf(cpf).orElse(null);
+        
     
-        if (cliente.getCPF() != cpf)
+        if (!cliente.getCPF().equals(cpf) )
         {
              new ResponseEntity<>("Cliente não encontrado", HttpStatus.NOT_FOUND);
         }

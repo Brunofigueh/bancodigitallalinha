@@ -42,6 +42,7 @@ public class ClienteService {
         if (  !validacaoCpf.validarCPF(cpf) )
         {
             log.info("CPF não valido");
+            log.info(cpf);
             return null;
         }
         if (!validarNome(nome)   )

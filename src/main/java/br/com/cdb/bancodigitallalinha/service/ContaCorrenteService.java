@@ -10,18 +10,19 @@ import br.com.cdb.bancodigitallalinha.entity.CategoriaDeClientes;
 import br.com.cdb.bancodigitallalinha.entity.Cliente;
 import br.com.cdb.bancodigitallalinha.entity.Conta;
 import br.com.cdb.bancodigitallalinha.entity.ContaCorrente;
+import br.com.cdb.bancodigitallalinha.entity.ContaPoupanca;
 import br.com.cdb.bancodigitallalinha.repository.ClienteRepository;
-import br.com.cdb.bancodigitallalinha.repository.ContaRepository;
+import br.com.cdb.bancodigitallalinha.repository.ContaCorrenteRepository;
 
 public class ContaCorrenteService {
     
     @Autowired
-    ContaRepository contaDao;
+    ContaCorrenteRepository contaCorrenteRepository;
     @Autowired
     ClienteRepository clienteDao;
 
 	
-	public boolean criarCCorrente( String senha, BigDecimal saldo, String cpf) 
+	public ContaCorrente criarCCorrente( String senha, BigDecimal saldo, String cpf) 
 	{
 		/**
 		 * Criação de conta corrente e aplicação de regras de negocio. 
@@ -31,11 +32,11 @@ public class ContaCorrenteService {
 		
 		if ( (cliente == null) )
 		{
-			return false;
+			return null;
 		}
 		if ( !validarSenha(senha) )
 		{
-			return false;
+			return null;
 		}
 
 		
@@ -56,10 +57,10 @@ public class ContaCorrenteService {
 		long ccNum = geradorNumeroCC();
 		cc.setNumeroConta(ccNum);
 		
-		contaDao.save(cc);
 		
 		
-		return true;
+		
+		return contaCorrenteRepository.save(cc);
 	}
 
 	
@@ -117,16 +118,16 @@ public class ContaCorrenteService {
 	 * @param: saldo: saldo da conta
 	 */
 	{
-		BigDecimal saldo = contaDao.buscaConta(numeroContaPattern).getSaldo();
+		BigDecimal saldo = buscaConta(numeroContaPattern).getSaldo();
 		saldo.add(valor);
 	}
 	//TRANFERENCIAS 
 	public void transfereciaPix(BigDecimal valor,  long numeroConta, long contaReceb)
 	{
-		BigDecimal saldo = contaDao.buscaConta(numeroConta).getSaldo();
+		BigDecimal saldo = buscaConta(numeroConta).getSaldo();
 		
 		
-		if( contaDao.contaCheck(numeroConta) && saldo.compareTo(valor) >= 0)
+		if( contaCheck(numeroConta) && saldo.compareTo(valor) >= 0)
 		{
 			
 			depositar(valor, contaReceb) ;
@@ -202,17 +203,17 @@ public class ContaCorrenteService {
 
 	
 	
-	//listar contas
-	public void mostraContasCorrentes() {
-		 contaDao.listarContas();
+	// //listar contas
+	// public void mostraContasCorrentes() {
+	// 	 contaDao.listarContas();
 		
-	}
+	// }
 
 	
 	public List<Conta> getContasCorrente()
 	{
 
-		for (Conta c: contaDao.findAll())
+		for (Conta c: contaCorrenteRepository.findAll())
 		{
 			if (c instanceof ContaCorrente)
 			{
@@ -220,6 +221,36 @@ public class ContaCorrenteService {
 			}
 		}
 		return null;
+	}
+
+		public ContaCorrente buscaConta(long numeroConta)
+	{
+		/**
+		 * Método que ira buscar uma conta poupanca considerando o número da conta.
+		 * @param numeroConta: Número da conta a ser buscada.
+		 * @return: Retorna a conta caso encontre.
+		 * @return: Retorna null caso não encontre a conta.   
+		 */
+		ContaCorrente conta = contaCorrenteRepository.findByNumeroConta(numeroConta);
+		
+		return conta;
+	}
+
+	public boolean contaCheck(long numeroConta)
+	{
+		/**
+		 * Método que ira verificar se a conta existe na base.
+		 * @param numeroConta: Número da conta a ser verificada.
+		 * @return: Retorna true caso encontre a conta.
+		 * @return: Retorna false caso não encontre a conta.   
+		 */
+		ContaCorrente conta = contaCorrenteRepository.findByNumeroConta(numeroConta);
+		if (conta == null)
+		{
+			return false;
+		}
+		
+		return true;
 	}
 
 }

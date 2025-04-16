@@ -13,15 +13,15 @@ import br.com.cdb.bancodigitallalinha.entity.ContaPoupanca;
 @Repository
 public interface ContaRepository extends JpaRepository<Conta, Long>
 {
-    @Query ("SELECT * FROM conta_corrente WHERE numero_conta = ?1")
-    public Conta findByContaCorrente(ContaCorrente contaCorrente);
-    @Query ("SELECT * FROM conta_poupanca WHERE numero_conta = ?1")  
-    public Conta findByContaPoupanca(ContaPoupanca contaPoupanca);
-    @Query ("SELECT * FROM conta WHERE numero_conta = ?1")
-    public boolean contaCheck(long numeroConta);
-    @Query ("SELECT * FROM conta WHERE numero_conta = ?1")
-    public Conta buscaConta(long numeroConta);
-    @Query ("SELECT * FROM conta")
-    public void listarContas();
+    // @Query ("SELECT * FROM conta_corrente WHERE numero_conta = ?1")
+    // public Conta findByContaCorrente(ContaCorrente contaCorrente);
+    // @Query ("SELECT * FROM conta_poupanca WHERE numero_conta = ?1")  
+    // public Conta findByContaPoupanca(ContaPoupanca contaPoupanca);
+    // @Query ("SELECT * FROM conta WHERE numero_conta = numero_conta")
+    // public boolean contaCheck(long numeroConta);
+    // @Query ("SELECT * FROM conta WHERE numero_conta = numero_conta")
+    // public Conta buscaConta(long numeroConta);
+    // @Query ("SELECT * FROM conta")
+    // public void listarContas();
 
 }

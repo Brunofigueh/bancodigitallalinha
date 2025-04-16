@@ -13,12 +13,6 @@ public interface ClienteRepository extends JpaRepository<Cliente, UUID> {
   
 
 
-    // Cliente save(Cliente cliente);
-
-    // Cliente getReferenceById(UUID clienteID);
-
-    // List<Cliente> findAll();
-
     Optional<Cliente> findByCpf(String cpf);
 
 }

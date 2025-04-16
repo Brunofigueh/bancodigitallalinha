@@ -10,10 +10,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.cdb.bancodigitallalinha.entity.Cliente;
 import br.com.cdb.bancodigitallalinha.entity.Conta;
 import br.com.cdb.bancodigitallalinha.entity.ContaCorrente;
 import br.com.cdb.bancodigitallalinha.entity.ContaPoupanca;
 import br.com.cdb.bancodigitallalinha.repository.ContaRepository;
+import br.com.cdb.bancodigitallalinha.service.ContaCorrenteService;
 
 
 @RestController
@@ -22,11 +24,17 @@ public class ContaController {
 
     @Autowired
     private ContaRepository contaRepository;
+    // @Autowired
+    // private ContaCorrenteService contaCorrenteService;
     
     @PostMapping("/addContaCorrente")
-    public ResponseEntity<String> addContaCorrente(@RequestBody ContaCorrente contaCorrente) {
+    public ResponseEntity<String> criarCCorrente(@RequestBody ContaCorrente contaCorrente) {
+        ContaCorrenteService contaCorrenteService = new ContaCorrenteService();
+        Cliente cliente = new Cliente();
+
+        ContaCorrente contaCorrenteAdded = contaCorrenteService.criarCCorrente(contaCorrente.getSenha(), contaCorrente.getSaldo(), cliente.getCPF());
         
-        if (contaCorrente != null )
+        if (contaCorrenteAdded != null )
         {
             return new ResponseEntity<>("Conta Corrente criada com sucesso "+ contaCorrente.getNumeroConta(), HttpStatus.CREATED);
         }
@@ -46,14 +54,14 @@ public class ContaController {
     }
 
     @PostMapping("/listCCorrente")
-    public ResponseEntity<List<Conta>> gerContaCorrente()
+    public ResponseEntity<List<Conta>> getContaCorrente()
     {
         List<Conta> contas = contaRepository.findAll();
         return new ResponseEntity<List<Conta>>(contas, HttpStatus.OK);    
     }
 
     @PostMapping("/listCPoupanca")
-    public ResponseEntity<List<Conta>> gerContaPoupanca()
+    public ResponseEntity<List<Conta>> getContaPoupanca()
     {
         List<Conta> contas = contaRepository.findAll();
         return new ResponseEntity<List<Conta>>(contas, HttpStatus.OK);    

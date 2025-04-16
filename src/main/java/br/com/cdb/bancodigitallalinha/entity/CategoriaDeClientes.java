@@ -3,6 +3,7 @@ package br.com.cdb.bancodigitallalinha.entity;
 import java.math.BigDecimal;
 
 
+
 public enum CategoriaDeClientes {
 
 	COMUM("12.00", "0.5", "300", "500"),

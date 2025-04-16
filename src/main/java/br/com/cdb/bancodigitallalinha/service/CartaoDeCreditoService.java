@@ -6,16 +6,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.cdb.bancodigitallalinha.entity.CategoriaDeClientes;
+import br.com.cdb.bancodigitallalinha.entity.Conta;
 import br.com.cdb.bancodigitallalinha.entity.ContaCorrente;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
 @Service
 public class CartaoDeCreditoService {
 
      // CARTÃO DE CREDITO 
-    @Autowired
-	CategoriaDeClientes ccs;
-    @Autowired
-	ContaCorrente cc;
+    // @Autowired
+	// CategoriaDeClientes ccs;
+    // @Autowired
+	// ContaCorrente cc;
 	
 	public void ccCartaoCredito(BigDecimal valor, BigDecimal limiteCredito, boolean status)
 	{
@@ -50,8 +53,8 @@ public class CartaoDeCreditoService {
 		 * "isSatusCredito"
 		 */
 
-		
-		if(cc.isStatusCredito() == false) {
+		ContaCorrente contaCorrente = new ContaCorrente();
+		if(contaCorrente.isStatusCredito() == false) {
 			return false;
 		}
 		
@@ -77,14 +80,16 @@ public class CartaoDeCreditoService {
 	{
 		if ( choice )
 		{
-			cc.setSeguroViagem(choice);
+			ContaCorrente contaCorrente = new ContaCorrente();
+			contaCorrente.setSeguroViagem(choice);
 			return true;
 		}
 		return false;
 	}
 	
 	public boolean checkSeguroViagem()
-	{
+	{	
+		ContaCorrente cc = new ContaCorrente();
 		if(cc.isSeguroViagem())
 		{
 			return true;
@@ -104,7 +109,7 @@ public class CartaoDeCreditoService {
 	{
 		BigDecimal valorAPagar ;
 		
-		CategoriaDeClientes limiteCred = ccs.defineCategoria(saldo);
+		CategoriaDeClientes limiteCred = CategoriaDeClientes.defineCategoria(saldo);
 		BigDecimal limite = limiteCred.getLimiteCredito();
 		BigDecimal taxa = taxaUsoCretido(valorGastoCredito ,limite);
 		if (checkSeguroViagem())
